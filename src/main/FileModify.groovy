@@ -7,7 +7,7 @@ class FileModify {
     static void main(String[] args) {
 //        FileModify fileModify = new FileModify()
         copyFile()
-       replace()
+        replace()
     }
 
     static void replace() {
@@ -17,6 +17,9 @@ class FileModify {
             list << file
         }
         list.each {
+            def dest = new File("src/new/list.txt")
+            def source = it.path
+            find(source, dest, "Spyros")
 
             println it.path
             new AntBuilder().replace(file: it.path, token: "Spyros", value: "5678")
@@ -24,29 +27,29 @@ class FileModify {
         }
     }
 
-   static def copyFile() {
-       String sourceDir = "src/resources/TextFiles"
-       String destinationDir ="src/resources/NewFiles"
-       new AntBuilder().copy( todir:destinationDir ) {
-           fileset( dir:sourceDir )
-       }
+    static def copyFile() {
+        String sourceDir = "src/resources/TextFiles"
+        String destinationDir = "src/resources/NewFiles"
+        new AntBuilder().copy(todir: destinationDir) {
+            fileset(dir: sourceDir)
+        }
     }
 
-    def static writeToFile(def directory, def infoList) {
+//    def static writeToFile(def directory, def infoList) {
 //        File file = new File("$directory")
 //
 //        infoList.each {
 //            file << ("${it}\r\n")
 //        }
-
+//
 //        def fileName = "list"
-        def inputFile = new File(directory)
-        inputFile.write(infoList)
-    }
+//        def inputFile = new File(directory)
+//        inputFile.write(infoList)
+//    }
 
-    def static find(source, dest, term) {
+     static find(source, dest, term) {
 
-        if(source.contains(term)){
+        if (source.contains(term)) {
             dest.write(term)
         }
     }
