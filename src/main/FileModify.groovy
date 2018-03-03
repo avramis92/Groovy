@@ -1,12 +1,11 @@
 package main
 
 import groovy.io.FileType
-import org.apache.tools.ant.util.FileUtils
 
 class FileModify {
     static void main(String[] args) {
-//        FileModify fileModify = new FileModify()
         copyFile()
+        listFiles()
         replace()
     }
 
@@ -17,14 +16,23 @@ class FileModify {
             list << file
         }
         list.each {
-            def dest = new File("src/new/list.txt")
-            def source = it.path
-            find(source, dest, "Spyros")
-
-            println it.path
             new AntBuilder().replace(file: it.path, token: "Spyros", value: "5678")
 
         }
+    }
+
+    static def listFiles() {
+        def list = []
+        def dir = new File("src/resources/TextFiles")
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            list << file
+        }
+        list.each {
+            def dest = new File("src/resources/NewFiles/list.txt")
+            def source = it.path
+            find(source, dest, "Spyros")
+        }
+
     }
 
     static def copyFile() {
@@ -35,22 +43,12 @@ class FileModify {
         }
     }
 
-//    def static writeToFile(def directory, def infoList) {
-//        File file = new File("$directory")
-//
-//        infoList.each {
-//            file << ("${it}\r\n")
-//        }
-//
-//        def fileName = "list"
-//        def inputFile = new File(directory)
-//        inputFile.write(infoList)
-//    }
 
-     static find(source, dest, term) {
+    static def find(source, dest, term) {
+        File source2 = new File(source)
 
-        if (source.contains(term)) {
-            dest.write(term)
+        if (source2.getText("UTF-8").find(term)) {
+            dest.append("${source}\n")
         }
     }
 }
