@@ -36,7 +36,7 @@ class FileModify {
         dir.eachFileRecurse(FileType.FILES) { file ->
             list << file
         }
-        log.info("Replacing ${oldString} in files ")
+        log.info("Replacing ${oldString} in files with ${newString} ")
         list.each {
             new AntBuilder().replace(file: it.path, token: oldString, value: newString)
 
