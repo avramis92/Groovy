@@ -1,4 +1,0 @@
-src\resources\TextFiles\file1.txt
-src\resources\TextFiles\file2.txt
-src\resources\TextFiles\file1.txt
-src\resources\TextFiles\file2.txt

@@ -22,8 +22,7 @@ class FileModify {
         def oldString = (String) user.get("oldString")
         def newString = (String) user.get("newString")
 
-        copyFile(sourceDir, destinationDir)
-        listFiles(sourceDir, listMod, oldString)
+        listFiles(destinationDir, sourceDir, listMod, oldString)
         replace(oldString, newString, destinationDir)
         def timeStop = new Date()
         TimeDuration duration = TimeCategory.minus(timeStop, timeStart)
@@ -43,7 +42,7 @@ class FileModify {
         }
     }
 
-    static def listFiles(sourceDir, listMod, oldString) {
+    static def listFiles(destinationDir, sourceDir, listMod, oldString) {
         def list = []
         def dir = new File(sourceDir)
         dir.eachFileRecurse(FileType.FILES) { file ->
@@ -53,21 +52,22 @@ class FileModify {
         list.each {
             def dest = new File(listMod)
             def source = it.path
-            find(source, dest, oldString)
+            find(destinationDir, source, dest, oldString)
         }
     }
 
     static def copyFile(sourceDir, destinationDir) {
         log.info("Greating copy of the files ")
         new AntBuilder().copy(todir: destinationDir) {
-            fileset(dir: sourceDir)
+            file(file: sourceDir)
         }
     }
 
-    static def find(source, dest, term) {
+    static def find(destinationDir, source, dest, term) {
         File source2 = new File(source)
         if (source2.getText("UTF-8").find(term)) {
             dest.append("${source}\n")
+            copyFile(source2, destinationDir)
         }
     }
 }
