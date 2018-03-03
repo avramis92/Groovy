@@ -1,13 +1,12 @@
 package main
 
 import groovy.io.FileType
-import org.apache.tools.ant.util.FileUtils
 
 class FileModify {
     static void main(String[] args) {
-//        FileModify fileModify = new FileModify()
         copyFile()
-       replace()
+        listFiles()
+        replace()
     }
 
     static void replace() {
@@ -17,37 +16,39 @@ class FileModify {
             list << file
         }
         list.each {
-
-            println it.path
             new AntBuilder().replace(file: it.path, token: "Spyros", value: "5678")
 
         }
     }
 
-   static def copyFile() {
-       String sourceDir = "src/resources/TextFiles"
-       String destinationDir ="src/resources/NewFiles"
-       new AntBuilder().copy( todir:destinationDir ) {
-           fileset( dir:sourceDir )
-       }
+    static def listFiles() {
+        def list = []
+        def dir = new File("src/resources/TextFiles")
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            list << file
+        }
+        list.each {
+            def dest = new File("src/resources/NewFiles/list.txt")
+            def source = it.path
+            find(source, dest, "Spyros")
+        }
+
     }
 
-    def static writeToFile(def directory, def infoList) {
-//        File file = new File("$directory")
-//
-//        infoList.each {
-//            file << ("${it}\r\n")
-//        }
-
-//        def fileName = "list"
-        def inputFile = new File(directory)
-        inputFile.write(infoList)
+    static def copyFile() {
+        String sourceDir = "src/resources/TextFiles"
+        String destinationDir = "src/resources/NewFiles"
+        new AntBuilder().copy(todir: destinationDir) {
+            fileset(dir: sourceDir)
+        }
     }
 
-    def static find(source, dest, term) {
 
-        if(source.contains(term)){
-            dest.write(term)
+    static def find(source, dest, term) {
+        File source2 = new File(source)
+
+        if (source2.getText("UTF-8").find(term)) {
+            dest.append("${source}\n")
         }
     }
 }
