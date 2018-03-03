@@ -1,0 +1,9 @@
+{
+  "data": {
+    "sourceDir": "src/resources/TextFiles",
+    "destinationDir": "src/resources/NewFiles",
+    "listMod": "src/resources/NewFiles/list.txt",
+    "oldString": "Spyros",
+    "newString": "!@#$%^&"
+  }
+}
